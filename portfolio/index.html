@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>云枢ERP · 全栈 ERP 项目作品集</title>
+<meta name="description" content="云枢ERP：11 个模块、138 个接口的全栈 ERP 系统项目作品集，含架构、核心机制、验证结果与界面。" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="云枢ERP · 全栈 ERP 项目作品集" />
+<meta property="og:description" content="11 个模块、98 条路由、138 个 REST 接口、43 张表。统一单据引擎实现审核即过账，配套 e2e、边界探针与浏览器验证。" />
+<meta property="og:image" content="hero.png" />
+<style>
+  :root {
+    --ink: #101828;
+    --muted: #5b6577;
+    --faint: #8a93a3;
+    --line: #e3e7ee;
+    --bg: #f6f7f9;
+    --surface: #ffffff;
+    --accent: #2f6bff;
+    --accent-soft: #eef3ff;
+    --ok: #12805c;
+    --r: 12px;
+    --max: 1180px;
+    --font: "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+    --mono: "Cascadia Code", Consolas, "SFMono-Regular", monospace;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font);
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .wrap { max-width: var(--max); margin: 0 auto; padding: 0 28px; }
+
+  /* nav */
+  .nav {
+    position: sticky; top: 0; z-index: 20;
+    height: 64px; display: flex; align-items: center;
+    background: rgba(246,247,249,.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav .wrap { display: flex; align-items: center; gap: 28px; width: 100%; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--ink); }
+  .brand .mark {
+    width: 28px; height: 28px; border-radius: 8px;
+    background: var(--accent); color: #fff;
+    display: grid; place-items: center; font-size: 13px; font-weight: 700;
+  }
+  .nav-links { display: flex; gap: 22px; margin-left: auto; font-size: 14px; }
+  .nav-links a { color: var(--muted); }
+  .nav-links a:hover { color: var(--ink); text-decoration: none; }
+  .nav .demo { color: var(--accent); font-weight: 600; }
+
+  /* hero */
+  .hero { padding: 56px 0 44px; }
+  .hero .wrap { display: grid; grid-template-columns: 1.02fr .98fr; gap: 48px; align-items: center; }
+  .eyebrow { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); font-weight: 700; }
+  h1 {
+    font-size: clamp(34px, 4.4vw, 54px);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    margin: 18px 0 18px;
+    font-weight: 800;
+  }
+  h1 .thin { color: var(--muted); font-weight: 300; }
+  .lede { font-size: 17px; color: var(--muted); max-width: 34em; margin: 0 0 26px; }
+  .cta-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    height: 44px; padding: 0 20px; border-radius: var(--r);
+    font-size: 15px; font-weight: 600; border: 1px solid transparent;
+    transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+  }
+  .btn:active { transform: translateY(1px); }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { text-decoration: none; box-shadow: 0 10px 24px rgba(47,107,255,.28); }
+  .btn-ghost { background: var(--surface); color: var(--ink); border-color: var(--line); }
+  .btn-ghost:hover { text-decoration: none; border-color: #c9d1de; }
+  .hero-note { font-size: 13px; color: var(--faint); margin-top: 16px; }
+
+  .shot { position: relative; }
+  .shot img {
+    display: block; width: 100%; height: auto;
+    border-radius: var(--r);
+    border: 1px solid var(--line);
+    background: #fff;
+    box-shadow: 0 28px 70px rgba(16,24,40,.14);
+  }
+  .shot figcaption { font-size: 12.5px; color: var(--faint); margin-top: 10px; }
+
+  /* metrics */
+  .metrics { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--surface); }
+  .metrics .wrap { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0; }
+  .metric { padding: 22px 18px; border-left: 1px solid var(--line); }
+  .metric:first-child { border-left: 0; padding-left: 0; }
+  .metric b { display: block; font-size: 26px; letter-spacing: -0.02em; }
+  .metric span { font-size: 12.5px; color: var(--muted); }
+
+  /* sections */
+  section { padding: 64px 0; }
+  .section-head { max-width: 720px; margin-bottom: 34px; }
+  .section-head h2 { font-size: 30px; letter-spacing: -0.02em; margin: 10px 0 10px; line-height: 1.2; }
+  .section-head p { color: var(--muted); margin: 0; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+  .prose p { color: var(--muted); margin: 0 0 14px; }
+  .prose p strong { color: var(--ink); font-weight: 600; }
+
+  .mech { border-top: 1px solid var(--line); }
+  .mech-row {
+    display: grid; grid-template-columns: 56px 240px 1fr; gap: 24px;
+    padding: 24px 0; border-bottom: 1px solid var(--line); align-items: start;
+  }
+  .mech-row .no { font-family: var(--mono); font-size: 13px; color: var(--accent); padding-top: 3px; }
+  .mech-row h3 { margin: 0; font-size: 17px; letter-spacing: -0.01em; }
+  .mech-row p { margin: 0; color: var(--muted); font-size: 14.5px; }
+
+  /* architecture */
+  .diagram {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--r);
+    padding: 26px; overflow-x: auto;
+  }
+  .diagram svg { display: block; min-width: 760px; width: 100%; height: auto; }
+  .diagram .cap { font-size: 12.5px; color: var(--faint); margin-top: 12px; }
+
+  /* verification */
+  .verify { display: grid; grid-template-columns: 1.15fr .85fr; gap: 32px; align-items: start; }
+  table.tests { width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+  table.tests th, table.tests td { text-align: left; padding: 12px 14px; font-size: 13.5px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  table.tests th { background: #fafbfc; font-weight: 600; color: var(--muted); font-size: 12px; letter-spacing: .04em; text-transform: uppercase; }
+  table.tests tr:last-child td { border-bottom: 0; }
+  .pass { color: var(--ok); font-weight: 700; white-space: nowrap; }
+  .callout {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 22px 24px;
+  }
+  .callout h3 { margin: 0 0 8px; font-size: 16px; }
+  .callout p { margin: 0 0 10px; color: var(--muted); font-size: 14px; }
+  .callout ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: 14px; }
+  .callout li { margin-bottom: 4px; }
+
+  /* gallery */
+  .gallery { display: grid; grid-template-columns: repeat(12, 1fr); gap: 18px; }
+  .gallery figure { margin: 0; grid-column: span 6; }
+  .gallery figure.wide { grid-column: span 12; }
+  .gallery img {
+    width: 100%; display: block; border: 1px solid var(--line); border-radius: var(--r);
+    background: #fff; box-shadow: 0 10px 28px rgba(16,24,40,.07);
+  }
+  .gallery figcaption { font-size: 12.5px; color: var(--faint); margin-top: 8px; }
+
+  /* boundaries */
+  .bounds { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--line); border-radius: var(--r); background: var(--surface); overflow: hidden; }
+  .bounds > div { padding: 24px 26px; }
+  .bounds > div + div { border-left: 1px solid var(--line); }
+  .bounds h3 { margin: 0 0 12px; font-size: 15px; }
+  .bounds ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: 14px; }
+  .bounds li { margin-bottom: 7px; }
+  .tag { display: inline-block; font-size: 11.5px; padding: 2px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-weight: 600; margin-right: 6px; }
+
+  /* run */
+  .run { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start; }
+  pre.code {
+    margin: 0; background: #0f172a; color: #dbe4f5; border-radius: var(--r);
+    padding: 20px 22px; font-family: var(--mono); font-size: 13px; line-height: 1.8; overflow-x: auto;
+  }
+  pre.code .c { color: #8fa3c8; }
+  .run ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: 14px; }
+  .run li { margin-bottom: 8px; }
+
+  /* english */
+  .en { background: var(--surface); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 44px 0; }
+  .en h2 { font-size: 15px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin: 0 0 12px; }
+  .en p { margin: 0; max-width: 900px; color: var(--ink); font-size: 16px; }
+
+  footer { padding: 34px 0 46px; color: var(--faint); font-size: 13px; }
+  footer .wrap { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+
+  @media (max-width: 960px) {
+    .hero .wrap, .two-col, .verify, .run { grid-template-columns: 1fr; }
+    .metrics .wrap { grid-template-columns: repeat(3, 1fr); }
+    .metric:nth-child(4) { border-left: 0; }
+    .mech-row { grid-template-columns: 42px 1fr; }
+    .mech-row p { grid-column: 2; }
+    .gallery figure, .gallery figure.wide { grid-column: span 12; }
+    .bounds { grid-template-columns: 1fr; }
+    .bounds > div + div { border-left: 0; border-top: 1px solid var(--line); }
+    .nav-links { display: none; }
+  }
+
+  @media print {
+    body { background: #fff; font-size: 12pt; }
+    .nav { display: none; }
+    section { padding: 26px 0; }
+    .hero { padding: 18px 0 10px; }
+    .hero .wrap { grid-template-columns: 1fr; gap: 18px; }
+    .shot img { box-shadow: none; max-height: 300px; object-fit: cover; object-position: top; }
+    .metrics .wrap { grid-template-columns: repeat(3, 1fr); }
+    .gallery figure, .gallery figure.wide { grid-column: span 6; }
+    .gallery img { box-shadow: none; }
+    a { color: var(--ink); text-decoration: none; }
+    .diagram { overflow: visible; }
+    .diagram svg { min-width: 0; }
+    section { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top"><span class="mark">云</span>云枢ERP</a>
+    <div class="nav-links">
+      <a href="#why">项目</a>
+      <a href="#arch">架构</a>
+      <a href="#verify">验证</a>
+      <a href="#gallery">界面</a>
+      <a href="#bounds">边界</a>
+      <a class="demo" href="#run">运行方式</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">个人项目 · 全栈 ERP · 2026</div>
+      <h1>把 ERP 的业务闭环<br />做成一套能跑的系统</h1>
+      <p class="lede">面向中小制造企业，用统一单据引擎打通销售、采购、库存、生产与财务，审核即过账。</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#gallery">查看界面</a>
+        <a class="btn btn-ghost" href="../README.md">阅读文档</a>
+      </div>
+      <div class="hero-note">Node.js · React 18 · TypeScript · Vite · Ant Design · ECharts · SQLite</div>
+    </div>
+    <figure class="shot">
+      <img src="assets/dashboard.png" alt="云枢ERP 经营工作台截图，包含销售、采购、库存、应收应付等指标与趋势图" />
+      <figcaption>经营工作台：12 个月经营数据与待办事项</figcaption>
+    </figure>
+  </div>
+</header>
+
+<div class="metrics">
+  <div class="wrap">
+    <div class="metric"><b>11</b><span>业务模块</span></div>
+    <div class="metric"><b>98</b><span>页面路由</span></div>
+    <div class="metric"><b>138</b><span>REST 接口</span></div>
+    <div class="metric"><b>43</b><span>数据表</span></div>
+    <div class="metric"><b>12</b><span>单据类型</span></div>
+    <div class="metric"><b>3</b><span>套自动化验证</span></div>
+  </div>
+</div>
+
+<section id="why">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">项目定位</div>
+      <h2>不是页面拼装，而是一条能对账的业务链</h2>
+      <p>经典 ERP 的难点不在表单，而在单据之间的数量、成本与凭证必须始终一致。这个项目的目标，是用一套可维护的引擎把这条链跑通。</p>
+    </div>
+    <div class="two-col prose">
+      <div>
+        <p><strong>问题：</strong>销售发货后，库存、应收、成本、总账、来源单状态五处都要变。任何一处遗漏，月底就对不上账。</p>
+        <p><strong>做法：</strong>所有业务动作收敛到 12 种单据和一套状态机，审核动作在同一个数据库事务里完成过账，失败整体回滚。</p>
+      </div>
+      <div>
+        <p><strong>结果：</strong>库存台账只增不改，凭证借贷必平，应收应付与发票、收付款可逐笔核对，报表数据来自同一份账。</p>
+        <p><strong>验证：</strong>端到端接口、边界权限、全站页面与真实浏览器流程都有脚本覆盖，交付后仍可持续回归。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="mech" style="background: var(--surface); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">核心机制</div>
+      <h2>四个决定系统能否长期维护的设计</h2>
+    </div>
+    <div class="mech">
+      <div class="mech-row">
+        <div class="no">01</div>
+        <h3>元数据驱动单据引擎</h3>
+        <p>12 种单据共用 documents、document_lines、document_logs 三张表。字段、状态机、动作、转单规则集中在 docTypes.mjs，前端由 /api/meta 动态渲染，新增单据类型不建表、不写表单。</p>
+      </div>
+      <div class="mech-row">
+        <div class="no">02</div>
+        <h3>审核即过账，事务内闭环</h3>
+        <p>发货审核同时扣减库存、确认收入与应收、结转销售成本、生成会计凭证、回写来源单已发数量。任一步失败，整笔业务回滚，不会留下半成品数据。</p>
+      </div>
+      <div class="mech-row">
+        <div class="no">03</div>
+        <h3>移动加权平均成本</h3>
+        <p>入库按数量与金额重算均价，出库取当前均价计价，每笔出入库写入不可变库存台账。库存金额、销售成本与总账存货科目来自同一套计算。</p>
+      </div>
+      <div class="mech-row">
+        <div class="no">04</div>
+        <h3>权限落到数据行</h3>
+        <p>RBAC 以模块乘动作授权，叠加 data_scope 的本人、本部门、全部三级范围。列表自动过滤，详情、编辑、审核在服务端做越权拦截，前端菜单与按钮同步隐藏。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="arch">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">系统架构</div>
+      <h2>单体部署，边界清楚</h2>
+      <p>一个 Node 进程同时提供 API 与前端静态资源，业务逻辑按领域拆在 lib 层，数据落地 SQLite。部署只需要 Node 22.5 以上，没有外部服务依赖。</p>
+    </div>
+    <div class="diagram">
+      <svg viewBox="0 0 1040 420" role="img" aria-label="云枢ERP 架构图：浏览器、Node 服务、领域服务与 SQLite 数据层">
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+            <path d="M0,0 L8,4 L0,8 Z" fill="#8a93a3" />
+          </marker>
+          <style>
+            .box { fill: #ffffff; stroke: #d8dee9; stroke-width: 1.2; rx: 10; }
+            .box-accent { fill: #eef3ff; stroke: #b9ccff; stroke-width: 1.2; rx: 10; }
+            .t { font-family: "Segoe UI", "Microsoft YaHei", sans-serif; fill: #101828; font-size: 13px; }
+            .ts { font-family: "Segoe UI", "Microsoft YaHei", sans-serif; fill: #5b6577; font-size: 11.5px; }
+            .tm { font-family: Consolas, monospace; fill: #5b6577; font-size: 11px; }
+            .edge { stroke: #8a93a3; stroke-width: 1.2; fill: none; marker-end: url(#arrow); }
+            .lane { fill: #f6f7f9; stroke: #e3e7ee; stroke-width: 1; rx: 12; }
+            .lane-t { font-family: "Segoe UI", "Microsoft YaHei", sans-serif; fill: #8a93a3; font-size: 10.5px; letter-spacing: 1.4px; }
+          </style>
+        </defs>
+
+        <rect class="lane" x="20" y="24" width="1000" height="86" />
+        <text class="lane-t" x="36" y="46">CLIENT</text>
+        <rect class="box" x="44" y="56" width="300" height="40" />
+        <text class="t" x="60" y="81">React 18 + TypeScript + Ant Design 5</text>
+        <rect class="box" x="368" y="56" width="230" height="40" />
+        <text class="t" x="384" y="81">ECharts 5 图表与报表</text>
+        <rect class="box" x="622" y="56" width="210" height="40" />
+        <text class="t" x="638" y="81">Vite 构建，SPA 路由</text>
+        <rect class="box" x="856" y="56" width="140" height="40" />
+        <text class="t" x="872" y="81">A4 打印</text>
+
+        <rect class="lane" x="20" y="128" width="1000" height="86" />
+        <text class="lane-t" x="36" y="150">API</text>
+        <rect class="box-accent" x="44" y="160" width="300" height="40" />
+        <text class="t" x="60" y="185">Node HTTP 服务（127.0.0.1:8787）</text>
+        <rect class="box" x="368" y="160" width="210" height="40" />
+        <text class="t" x="384" y="185">会话认证 / RBAC</text>
+        <rect class="box" x="602" y="160" width="210" height="40" />
+        <text class="t" x="618" y="185">统一路由 / 分页</text>
+        <rect class="box" x="836" y="160" width="160" height="40" />
+        <text class="tm" x="852" y="185">138 endpoints</text>
+
+        <rect class="lane" x="20" y="232" width="1000" height="96" />
+        <text class="lane-t" x="36" y="254">DOMAIN SERVICES</text>
+        <rect class="box" x="44" y="264" width="176" height="46" />
+        <text class="t" x="60" y="284">单据引擎</text>
+        <text class="ts" x="60" y="301">docTypes / docService</text>
+        <rect class="box" x="236" y="264" width="176" height="46" />
+        <text class="t" x="252" y="284">过账与凭证</text>
+        <text class="ts" x="252" y="301">posting / gl</text>
+        <rect class="box" x="428" y="264" width="176" height="46" />
+        <text class="t" x="444" y="284">库存与成本</text>
+        <text class="ts" x="444" y="301">stock / 移动加权</text>
+        <rect class="box" x="620" y="264" width="176" height="46" />
+        <text class="t" x="636" y="284">编号与主数据</text>
+        <text class="ts" x="636" y="301">numbering / masterdata</text>
+        <rect class="box" x="812" y="264" width="184" height="46" />
+        <text class="t" x="828" y="284">审计与参数</text>
+        <text class="ts" x="828" y="301">audit / settings</text>
+
+        <rect class="lane" x="20" y="344" width="1000" height="64" />
+        <text class="lane-t" x="36" y="362">DATA</text>
+        <rect class="box" x="44" y="372" width="360" height="28" />
+        <text class="t" x="60" y="391">SQLite 单文件数据库，WAL 模式，43 张表</text>
+        <rect class="box" x="424" y="372" width="250" height="28" />
+        <text class="ts" x="440" y="391">迁移脚本 + 确定性种子数据</text>
+        <rect class="box" x="694" y="372" width="300" height="28" />
+        <text class="ts" x="710" y="391">库存台账只增不改，凭证借贷必平</text>
+
+        <path class="edge" d="M520,100 L520,156" />
+        <path class="edge" d="M520,204 L520,260" />
+        <path class="edge" d="M520,312 L520,340" />
+      </svg>
+      <div class="cap">前端与 API 同进程部署；领域逻辑位于 server/lib，接口位于 server/api，启动时自动挂载。</div>
+    </div>
+  </div>
+</section>
+
+<section id="verify" style="background: var(--surface); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">验证与质量</div>
+      <h2>把能不能用，交给脚本回答</h2>
+      <p>从接口闭环到真实浏览器操作，再到越权与边界攻击，全部有可复跑的脚本。下面的数字来自最终代码快照的真实执行输出。</p>
+    </div>
+    <div class="verify">
+      <table class="tests">
+        <thead><tr><th>验证项</th><th>规模</th><th>结果</th></tr></thead>
+        <tbody>
+          <tr><td>端到端接口闭环<br /><span style="color:var(--faint)">npm run e2e</span></td><td>67 项断言</td><td class="pass">67 / 67</td></tr>
+          <tr><td>边界与权限探针<br /><span style="color:var(--faint)">scripts/probe.mjs</span></td><td>16 项攻击测试</td><td class="pass">16 / 16</td></tr>
+          <tr><td>全站页面巡检<br /><span style="color:var(--faint)">scripts/audit.mjs</span></td><td>73 个路由</td><td class="pass">73 / 73</td></tr>
+          <tr><td>真实浏览器 UI 流程<br /><span style="color:var(--faint)">scripts/ui-flow.mjs</span></td><td>16 个步骤</td><td class="pass">16 / 16</td></tr>
+          <tr><td>筛选下拉回归<br /><span style="color:var(--faint)">npm run ui:filter</span></td><td>7 个下拉</td><td class="pass">7 / 7</td></tr>
+          <tr><td>数据勾稽自检<br /><span style="color:var(--faint)">npm run check</span></td><td>负库存 / 借贷 / 总额</td><td class="pass">0 异常</td></tr>
+        </tbody>
+      </table>
+      <div class="callout">
+        <h3>交付后仍在修</h3>
+        <p>边界探针发现并修复 8 个真实缺陷，用户反馈的 1 个界面缺陷当日修复，全部补了回归脚本。</p>
+        <ul>
+          <li>同一订单重复发货，超发 10 台</li>
+          <li>收款超过发票余额，导致账实不一致</li>
+          <li>负库存开关未生效</li>
+          <li>跨模块越权读取销售单据</li>
+          <li>数据范围配置未落到查询</li>
+          <li>非法折扣、税率与日期可入库</li>
+          <li>筛选下拉选项空白（字符串数组）</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="gallery">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">界面</div>
+      <h2>真实页面，不是概念稿</h2>
+      <p>以下截图来自运行中的系统，数据为固定种子生成的 12 个月模拟经营数据。</p>
+    </div>
+    <div class="gallery">
+      <figure class="wide">
+        <img src="assets/sales-order.png" alt="销售订单详情页，含单据状态、客户、明细、金额与关联单据" />
+        <figcaption>销售订单详情：状态时间线、明细金额、来源单与下游单据</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/finance.png" alt="财务总览页面，含应收应付、收支与账龄" />
+        <figcaption>财务总览：应收应付与账龄分布</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/work-order.png" alt="生产工单详情页，含物料需求、工序与领料完工动作" />
+        <figcaption>生产工单：物料需求、工序进度与领料报工</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/statements.png" alt="财务报表页面，资产负债表、利润表与现金流量表" />
+        <figcaption>三大报表：资产负债平衡校验通过</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/reports.png" alt="报表中心经营驾驶舱，含 KPI、趋势与排行" />
+        <figcaption>报表中心：经营驾驶舱</figcaption>
+      </figure>
+      <figure class="wide">
+        <img src="assets/roles.png" alt="系统管理角色权限页，模块乘动作权限矩阵与数据范围配置" />
+        <figcaption>角色权限：模块乘动作矩阵，叠加全部、本部门、本人数据范围</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section id="bounds" style="background: var(--surface); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">边界与取舍</div>
+      <h2>能做什么，不能做什么</h2>
+      <p>把限制写在作品集里，比藏在演示里更可信。</p>
+    </div>
+    <div class="bounds">
+      <div>
+        <h3>适合的场景</h3>
+        <ul>
+          <li>ERP 业务流程学习与教学演示</li>
+          <li>中小企业内部试点的功能原型</li>
+          <li>全栈项目作品展示与面试讲解</li>
+          <li>二次开发起点：单据、科目、编号都可配置</li>
+        </ul>
+      </div>
+      <div>
+        <h3>暂不覆盖</h3>
+        <ul>
+          <li>固定资产、预算、委外、质检、多币种、银行对账</li>
+          <li>多级审批流与金额阈值，当前为单据级审批</li>
+          <li>高并发场景：单进程 SQLite，适合小团队</li>
+          <li>商用安全加固：默认密码、HTTPS、限流需自行配置</li>
+        </ul>
+      </div>
+    </div>
+    <p style="color: var(--faint); font-size: 13px; margin-top: 14px;">所有客户、供应商、物料与单据均为模拟数据；项目在 AI 辅助下完成编码，需求拆解、架构、数据模型、验收与缺陷修复由我负责。</p>
+  </div>
+</section>
+
+<section id="run">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">运行与文档</div>
+      <h2>三步启动，本地可复现</h2>
+    </div>
+    <div class="run">
+<pre class="code"><span class="c"># 环境：Node.js 22.5+（内置 node:sqlite）</span>
+cd erp-suite
+npm install
+npm run seed      <span class="c"># 生成 12 个月演示数据</span>
+npm run build
+npm start         <span class="c"># http://127.0.0.1:8787</span>
+
+<span class="c"># 演示账号</span>
+admin / admin123  <span class="c"># 系统管理员</span>
+guest / guest123  <span class="c"># 只读访客</span></pre>
+      <div>
+        <ul>
+          <li>Windows 可双击 <code>启动ERP.cmd</code>，自动检查依赖、数据与构建。</li>
+          <li><a href="../docs/05-用户手册.md">用户手册</a>：12 章、逐页操作步骤与状态规则。</li>
+          <li><a href="../docs/06-架构说明.md">架构说明</a>：数据模型、过账规则与权限设计。</li>
+          <li><a href="../docs/08-交付验收报告.md">交付验收报告</a>：验证证据、已知限制与扩展建议。</li>
+          <li><a href="../docs/01-ERP功能分析.md">功能分析</a>：224 条功能点与竞品对标。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="en">
+  <div class="wrap">
+    <h2>Project in English</h2>
+    <p>Yunshu ERP is a full-stack ERP built for small manufacturers. Eleven modules share one metadata-driven document engine: approving a document posts inventory, receivables or payables, cost of goods and double-entry vouchers inside a single transaction. The stack is Node.js with built-in SQLite, React 18, TypeScript and Ant Design, deployed as one process. Forty-three tables, 138 REST endpoints, and automated e2e, boundary and browser tests back the build.</p>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>云枢ERP · 云枢科技（深圳）有限公司（模拟数据）</span>
+    <span>项目作品集 · 2026-10-25</span>
+  </div>
+</footer>
+
+</body>
+</html>

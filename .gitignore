@@ -1,0 +1,24 @@
+# 依赖
+node_modules/
+.turbo/
+
+# 构建产物
+web/dist/
+
+# 数据库（演示数据可通过 npm run seed 重新生成）
+server/data/
+server/data-*/
+
+# QA 截图与临时产物
+qa-shots/
+*.log
+
+# 编辑器
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# 环境变量
+.env
+.env.local

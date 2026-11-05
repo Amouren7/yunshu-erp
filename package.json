@@ -1,0 +1,40 @@
+{
+  "name": "yunshu-erp",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "云枢ERP - 企业资源计划系统 (Yunshu ERP)",
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "build": "vite build",
+    "start": "node server/index.mjs",
+    "boot": "node scripts/boot.mjs",
+    "seed": "node server/seed.mjs",
+    "reset": "node scripts/reset.mjs",
+    "check": "node scripts/check.mjs",
+    "shots": "node scripts/shots.mjs",
+    "e2e": "node scripts/e2e.mjs",
+    "test": "node scripts/e2e.mjs",
+    "launcher": "node scripts/make-launcher.mjs",
+    "verify:launcher": "node scripts/verify-launcher.mjs",
+    "ui:filter": "node scripts/ui-filter.mjs",
+    "portfolio": "node scripts/portfolio.mjs"
+  },
+  "dependencies": {
+    "@ant-design/icons": "^5.5.2",
+    "antd": "^5.22.7",
+    "dayjs": "^1.11.13",
+    "echarts": "^5.5.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.28.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "puppeteer-core": "^25.16.0",
+    "typescript": "^5.7.2",
+    "vite": "^5.4.11"
+  }
+}

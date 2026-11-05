@@ -6,6 +6,8 @@
 **技术栈**：Node.js（内置 `node:sqlite`）· React 18 · TypeScript · Vite 5 · Ant Design 5 · ECharts 5
 **版本**：V1.0.0　|　**默认端口**：`8787`　|　**数据文件**：`server/data/erp.db`　|　**演示账号**：`admin / admin123`
 
+**GitHub 仓库**：<https://github.com/Amouren7/yunshu-erp>　|　**在线作品集**：<https://amouren7.github.io/yunshu-erp/>
+
 ---
 
 ## 目录
@@ -40,6 +42,9 @@
 ## 作品集
 
 如果要把本项目用于简历、面试或作品集展示，直接使用以下文件：
+
+- 在线作品集：<https://amouren7.github.io/yunshu-erp/>
+- GitHub 仓库：<https://github.com/Amouren7/yunshu-erp>
 
 | 文件 | 用途 |
 |---|---|
